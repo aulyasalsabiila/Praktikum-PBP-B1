@@ -1,0 +1,201 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Tambah Produk</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: solid black 2px;
+            background-color: #FFF8E8;
+        }
+        h1 {
+            text-align: left;
+            color: #d88d32;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 5px;
+            color: #333;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            font-size: 12px;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #4CAF50;
+            background-color: #F7EED3;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #C0C78C;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #A6B37D;
+            transform: scale(1.05);
+        }
+        button:active {
+            background-color: #3e8e41;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        .container {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: lighter;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            color: #555;
+        }
+        .container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #eee;
+            border-radius: 5px;
+        }
+        .container:hover input ~ .checkmark {
+            background-color: #ccc;
+        }
+        .container input:checked ~ .checkmark {
+            background-color: #AAB396;
+        }
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+        .container input:checked ~ .checkmark:after {
+            display: block;
+        }
+        .container .checkmark:after {
+            left: 7px;
+            top: 3px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+        .jasa-kirim {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #FFFFFF;
+            border-radius: 5px;
+        }
+        .jasa-kirim label {
+            color: #000000;
+        }
+    </style>
+</head>
+<body onload="generateCaptcha()">
+    <h1>Form Tambah Produk</h1>
+    <form id="productForm">
+        <label for="namaProduk">Nama Produk</label>
+        <input type="text" id="namaProduk" name="namaProduk" required minlength="5" maxlength="30">
+
+        <label for="deskripsiProduk">Deskripsi Produk</label>
+        <textarea id="deskripsiProduk" name="deskripsiProduk" required minlength="5" maxlength="100"></textarea>
+
+        <label for="kategori">Kategori</label>
+        <select id="kategori" name="kategori" required onchange="updateSubKategori()">
+            <option value="">Pilih Kategori</option>
+            <option value="Baju">Baju</option>
+            <option value="Elektronik">Elektronik</option>
+            <option value="Alat Tulis">Alat Tulis</option>
+        </select>
+
+        <label for="subKategori">Sub Kategori</label>
+        <select id="subKategori" name="subKategori" required>
+            <option value="">Pilih Sub Kategori</option>
+        </select>
+
+        <label for="hargaSatuan">Harga Satuan</label>
+        <input type="number" id="hargaSatuan" name="hargaSatuan" required>
+
+        <label for="grosir">Grosir</label>
+        <select id="grosir" name="grosir" onchange="toggleHargaGrosir()">
+            <option value="Tidak">Tidak</option>
+            <option value="Ya">Ya</option>
+        </select>
+
+        <div id="hargaGrosirContainer" style="display:none;">
+            <label for="hargaGrosir">Harga Grosir</label>
+            <input type="number" id="hargaGrosir" name="hargaGrosir">
+        </div>
+
+        <label>Jasa Kirim</label>
+        <div class="jasa-kirim">
+            <label class="container">JNE
+                <input type="checkbox" id="jne" name="jasaKirim" value="JNE" checked="checked">
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">TIKI
+                <input type="checkbox" id="tiki" name="jasaKirim" value="TIKI">
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">SiCepat
+                <input type="checkbox" id="sicepat" name="jasaKirim" value="SiCepat">
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">Ninja Express
+                <input type="checkbox" id="ninjaexpress" name="jasaKirim" value="Ninja Express">
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">Wahana
+                <input type="checkbox" id="wahana" name="jasaKirim" value="Wahana">
+                <span class="checkmark"></span>
+            </label>
+        </div>
+
+        <label for="captcha">Captcha</label>
+        <input type="text" id="captcha" name="captcha" readonly>
+        <input type="text" id="captchaInput" name="captchaInput" placeholder="Masukkan Captcha" required>
+
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+    </form>
+
+    <script src="js_validation_24060122140163.js"></script>
+</body>
+</html>
